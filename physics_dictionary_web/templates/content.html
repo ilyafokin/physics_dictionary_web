@@ -1,0 +1,34 @@
+{% extends "index.html" %}
+{% block title %}This is an example page{% endblock %}
+
+{% block content %}
+  <h1 class="text-primary">
+    HEP Acronym Lookup
+  </h1>
+
+  <h4 class="text-secondary">
+    Enter an acronym
+  </h4>
+
+  <form method="post" class="w-100 me-3">
+    <input name="acronym" id="acronym" placeholder="HEP" type="search" required>
+    <input type="submit" value="Search">
+  </form>
+
+  {% if description %}
+  <br />
+  <p class="lead mb-4">
+  <b>
+    {{ acronym }}
+  </b>
+  means
+  <b>
+    {{ description }}
+  </b>.
+  {% if  webpage %}
+  <br />
+  Further information <a href="{{ webpage }}">here</a>.
+  {% endif %}
+  </p>
+  {% endif %}
+{% endblock %}

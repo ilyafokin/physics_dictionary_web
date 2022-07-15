@@ -30,6 +30,8 @@ Run the Flask webserver
     flask init-db # only need to do this once
     flask run
 
+# Both
+
 To deactivate, do
     
     deactivate

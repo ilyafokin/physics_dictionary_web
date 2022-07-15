@@ -4,7 +4,7 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
 
-from physics_dictionary_web.db2 import Dictionary
+from physics_dictionary_web.db import Dictionary
 
 bp = Blueprint('lookup', __name__, url_prefix='/')
 dict = Dictionary()

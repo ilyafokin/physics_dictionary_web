@@ -1,9 +1,9 @@
 {% extends "index.html" %}
-{% block title %}This is an example page{% endblock %}
+{% block title %}Physics Dictionary{% endblock %}
 
 {% block content %}
   <h1 class="text-primary">
-    HEP Acronym Lookup
+    High Energy Physics Acronym Dictionary
   </h1>
 
   <h4 class="text-secondary">
@@ -11,24 +11,108 @@
   </h4>
 
   <form method="post" class="w-100 me-3">
-    <input name="acronym" id="acronym" placeholder="HEP" type="search" required>
+    <input name="acronym" id="acronym" placeholder="User input" type="search" required>
     <input type="submit" value="Search">
   </form>
 
-  {% if description %}
-  <br />
-  <p class="lead mb-4">
-  <b>
-    {{ acronym }}
-  </b>
-  means
-  <b>
-    {{ description }}
-  </b>.
-  {% if  webpage %}
-  <br />
-  Further information <a href="{{ webpage }}">here</a>.
+  {% if close_match %}
+    {% if match|length > 1 %}
+      No direct match found for <b>{{ acronym }}</b>. Trying  {{ match|length }} close matches
+    {% endif %}
+    {% if match|length == 1 %}
+      No direct match found. Trying close match
+    {% endif %}
+    <br>
+    {% for i in range(0, amount) %}
+
+      {% if descriptions[i]|length > 1%}
+        <br>
+        <li><b>{{match[i]}}</b>. {{descriptions[i]|length}} descriptions available.</li>
+        {% for j in range(0, descriptions[i]|length) %}
+          {% if j == 0 %}
+            <br>It could mean <b>{{descriptions[i][j][0]}} </b>
+          {% endif %}
+          {% if j != 0 %}
+            <br>Or it could mean <b>{{descriptions[i][j][0]}} </b>
+          {% endif %}
+          {% if descriptions[i][j][1] != "" %}
+            <br>The tags are <b> {{descriptions[i][j][1]}} </b>
+          {% endif %}
+          {% if descriptions[i][j][2] != "" %}
+            <br>More information can be found <a href="{{ descriptions[i][j][2] }}">here</a>.
+          {% endif %}     
+          <br>
+        {% endfor %}
+      {% endif %}
+
+      {% if descriptions[i]|length == 1%}
+        <br>
+        <li><b>{{match[i]}}</b></li>
+        <br>
+        It means <b> {{descriptions[i][0][0]}} </b>
+        {% if descriptions[i][0][1] != "" %}
+          <br>The tags are <b> {{descriptions[i][0][1]}} </b>
+        {% endif %}
+        {% if descriptions[i][0][2] != "" %}
+          <br>More information can be found <a href="{{ descriptions[i][0][2] }}">here</a>.
+        {% endif %}
+        <br>
+      {% endif %}
+
+    {% endfor %}
+    
   {% endif %}
-  </p>
+
+
+
+  {% if not close_match %}
+    Found direct match
+    <br>
+    {% for i in range(0, amount) %}
+
+      {% if descriptions[i]|length > 1%}
+        <br>
+        <li><b>{{match[i]}}</b>. {{descriptions[i]|length}} descriptions available.</li>
+        {% for j in range(0, descriptions[i]|length) %}
+          {% if j == 0 %}
+            <br>It could mean <b>{{descriptions[i][j][0]}} </b>
+          {% endif %}
+          {% if j != 0 %}
+            <br>Or it could mean <b>{{descriptions[i][j][0]}} </b>
+          {% endif %}
+          {% if descriptions[i][j][1] != "" %}
+            <br>The tags are <b> {{descriptions[i][j][1]}} </b>
+          {% endif %}
+          {% if descriptions[i][j][2] != "" %}
+            <br>More information can be found <a href="{{ descriptions[i][j][2] }}">here</a>.
+          {% endif %}     
+          <br>
+        {% endfor %}
+      {% endif %}
+
+      {% if descriptions[i]|length == 1%}
+        <br>
+        <li><b>{{match[i]}}</b></li>
+        <br>
+        It means <b> {{descriptions[i][0][0]}} </b>
+        {% if descriptions[i][0][1] != "" %}
+          <br>The tags are <b> {{descriptions[i][0][1]}} </b>
+        {% endif %}
+        {% if descriptions[i][0][2] != "" %}
+          <br>More information can be found <a href="{{ descriptions[i][0][2] }}">here</a>.
+        {% endif %}
+        <br>
+      {% endif %}
+
+    {% endfor %}
+
   {% endif %}
+
+  {% if match == [] %}
+    <p class="lead mb-4">
+    <b>{{ acronym }}</b> was not found in the dictionary.
+    <br> If you find the definition, please add it.
+  {% endif %}
+
+
 {% endblock %}
